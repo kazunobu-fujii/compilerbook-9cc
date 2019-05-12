@@ -62,7 +62,7 @@ void tokenize(char *p)
             continue;
         }
 
-        if (*p == '+' || *p == '-' || *p == '*')
+        if (*p == '+' || *p == '-' || *p == '*' || *p == '(' || *p == ')')
         {
             tokens[i].ty = *p;
             tokens[i].input = p;
@@ -117,6 +117,16 @@ Node *add();
 
 Node *term()
 {
+    // 次のトークンが'('なら、"(" add ")"のはず
+    if (consume('('))
+    {
+        Node *node = add();
+        if (!consume(')'))
+            error("開きカッコに対応する閉じカッコがありません: %s", tokens[pos].input);
+        return node;
+    }
+
+    // そうでなければ数値のはず
     if (tokens[pos].ty == TK_NUM)
         return new_node_num(tokens[pos++].val);
 

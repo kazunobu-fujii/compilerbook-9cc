@@ -76,6 +76,27 @@ void tokenize(char *p)
             continue;
         }
 
+        if ('a' <= *p && *p <= 'z')
+        {
+            vec_push(vec, new_token(TK_IDENT, 0, p));
+            p++;
+            continue;
+        }
+
+        if (*p == '=')
+        {
+            vec_push(vec, new_token(*p, 0, p));
+            p++;
+            continue;
+        }
+
+        if (*p == ';')
+        {
+            vec_push(vec, new_token(*p, 0, p));
+            p++;
+            continue;
+        }
+
         error("トークナイズできません: %s", p);
         exit(1);
     }
